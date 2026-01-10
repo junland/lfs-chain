@@ -1,0 +1,70 @@
+name: Build on GitHub Hosted Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Run Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - TARGET_ARCH: x86_64 # AMD64
+            TOOLCHAIN_TARBALL_URL: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--stable-2025.08-1.tar.xz"
+            TOOLCHAIN_TARBALL_FILENAME: x86-64--glibc--stable-2025.08-1.tar.xz
+            TARGET_TRIPLET: x86_64-linux-gnu
+          - TARGET_ARCH: aarch64   # ARM64
+            TOOLCHAIN_TARBALL_URL: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2025.08-1.tar.xz"
+            TOOLCHAIN_TARBALL_FILENAME: aarch64--glibc--stable-2025.08-1.tar.xz
+            TARGET_TRIPLET: aarch64-linux-gnu
+    steps:
+      - name: Install dependencies (Ubuntu/Debian)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            autoconf \
+            autoconf2.69 \
+            automake \
+            autopoint \
+            bison \
+            build-essential \
+            byacc \
+            flex \
+            gawk \
+            gettext \
+            gperf \
+            help2man \
+            libssl-dev \
+            libtool \
+            m4 \
+            make \
+            meson \
+            ninja-build \
+            perl \
+            pkg-config \
+            tree \
+            unzip \
+            zlib1g-dev
+
+      - name: Reconfigure sh to use bash
+        run: |
+          sudo dpkg-reconfigure dash
+          sudo ln -sf bash /bin/sh
+
+      - uses: actions/checkout@v4
+
+      - name: Allow scripts to run
+        run: chmod +x ./*.sh
+
+      - name: Display the sources
+        run: ls -lah rootfs/tmp/sources
+
+      - name: Execute the stage1 build script
+        id: stage1
+        env:
+          TARGET_ARCH: ${{ matrix.TARGET_ARCH }}
+          TARGET_TRIPLET: ${{ matrix.TARGET_TRIPLET }}
+          TOOLCHAIN_TARBALL_URL: ${{ matrix.TOOLCHAIN_TARBALL_URL }}
+          TOOLCHAIN_TARBALL_FILENAME: ${{ matrix.TOOLCHAIN_TARBALL_FILENAME }}
+        run: ./build-stage1.sh
