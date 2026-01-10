@@ -1,11 +1,7 @@
-https://astron.com/pub/file/file-5.46.tar.gz
 https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.16.1.tar.xz
-https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.47.tar.gz
-https://distfiles.ariadne.space/pkgconf/pkgconf-2.5.1.tar.xz
 https://download.savannah.gnu.org/releases/acl/acl-2.3.2.tar.xz
 https://download.savannah.gnu.org/releases/attr/attr-2.5.2.tar.gz
 https://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.5.8.tar.gz
-https://files.pythonhosted.org/packages/source/p/packaging/packaging-25.0.tar.gz
 https://ftp.gnu.org/gnu/inetutils/inetutils-2.6.tar.xz
 https://ftp.gnu.org/gnu/less/less-679.tar.gz
 https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2
@@ -20,7 +16,6 @@ https://github.com/shadow-maint/shadow/releases/download/4.18.0/shadow-4.18.0.ta
 https://github.com/tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.xz
 https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
 https://gitlab.com/procps-ng/procps/-/archive/v4.0.5/procps-v4.0.5.tar.bz2
-https://invisible-mirror.net/archives/ncurses/current/ncurses-6.5-20250809.tgz
 https://mirrors.dotsrc.org/gnu/autoconf/autoconf-2.72.tar.xz
 https://mirrors.dotsrc.org/gnu/automake/automake-1.18.1.tar.xz
 https://mirrors.dotsrc.org/gnu/bash/bash-5.3.tar.gz
@@ -49,17 +44,7 @@ https://mirrors.dotsrc.org/gnu/readline/readline-8.3.tar.gz
 https://mirrors.dotsrc.org/gnu/sed/sed-4.9.tar.xz
 https://mirrors.dotsrc.org/gnu/tar/tar-1.35.tar.xz
 https://mirrors.dotsrc.org/gnu/texinfo/texinfo-7.2.tar.xz
-https://pypi.org/packages/source/f/flit-core/flit_core-3.12.0.tar.gz
-https://pypi.org/packages/source/s/setuptools/setuptools-80.9.0.tar.gz
-https://pypi.org/packages/source/w/wheel/wheel-0.46.1.tar.gz
 https://sourceware.org/ftp/elfutils/0.193/elfutils-0.193.tar.bz2
 https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
-https://www.cpan.org/src/5.0/perl-5.42.0.tar.xz
-https://www.iana.org/time-zones/repository/releases/tzdata2025b.tar.gz
 https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.76.tar.xz
 https://www.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-2.41.1.tar.xz
-https://www.linuxfromscratch.org/patches/lfs/12.4/glibc-2.42-fhs-1.patch
-https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz
-https://zlib.net/zlib-1.3.1.tar.xz
-https://github.com/ninja-build/ninja/archive/v1.13.1/ninja-1.13.1.tar.gz
-https://github.com/mesonbuild/meson/releases/download/1.8.3/meson-1.8.3.tar.gz
