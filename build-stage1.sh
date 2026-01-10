@@ -12,6 +12,10 @@ SOURCES_DIR=${SOURCES_DIR:-"${TARGET_ROOTFS_DIR}/sources"}
 SOURCES_LIST=${SOURCES_LIST:-"${PWD}/data/sources.list"}
 SOURCES_BUILD_DIR=${SOURCES_BUILD_DIR:-"${TARGET_ROOTFS_DIR}/build"}
 
+msg() {
+	echo " ===> $*"
+}
+
 extract_file() {
 	local archive_file=$1
 	local dest_dir=$2
@@ -71,26 +75,25 @@ extract_file() {
 	esac
 }
 
-echo "Downloading toolchain tarball..."
+msg "Downloading toolchain tarball..."
 
 mkdir -vp "${TOOLCHAIN_DIR}"
 
-wget -O "${TOOLCHAIN_DIR}/${TOOLCHAIN_TARBALL_FILENAME}" "${TOOLCHAIN_TARBALL_URL}"
+wget -nv --tries=15 --waitretry=15 -O "${TOOLCHAIN_DIR}/${TOOLCHAIN_TARBALL_FILENAME}" "${TOOLCHAIN_TARBALL_URL}"
 
-echo "Extracting toolchain..."
+msg "Extracting toolchain..."
 
 extract_file "${TOOLCHAIN_DIR}/${TOOLCHAIN_TARBALL_FILENAME}" "${TOOLCHAIN_DIR}"
 
-echo "Setting up target build directory..."
-
+msg "Setting up target build directory..."
 mkdir -p "${TARGET_ROOTFS_DIR}"
 
 # Run toolchain relocate script if it exists
 if [ -f "${TOOLCHAIN_DIR}/relocate-toolchain.sh" ]; then
-    echo "Relocating toolchain..."
+    msg "Relocating toolchain..."
     bash "${TOOLCHAIN_DIR}/relocate-toolchain.sh" "${TARGET_ROOTFS_DIR}"
 else
-    echo "No relocate-toolchain.sh script found, please ensure the toolchain is correctly set up."
+    msg "No relocate-toolchain.sh script found, please ensure the toolchain is correctly set up."
     exit 1
 fi
 
@@ -100,13 +103,13 @@ export PATH="${TOOLCHAIN_DIR}/bin:${PATH}"
 mkdir -vp "${SOURCES_BUILD_DIR}" "${SOURCES_DIR}" "${TARGET_ROOTFS_DIR}"
 
 # Download all source files listed in sources.list file
-echo "Downloading source files..."
+msg "Downloading source files..."
 
 wget -nv --tries=15 --waitretry=15 --input-file="${SOURCES_LIST}" --directory-prefix="${SOURCES_DIR}"
 
 # Start the build for m4
 
-echo "Starting build for m4..."
+msg "Starting build for m4..."
 
 extract_file "${SOURCES_DIR}/m4-1.4.19.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
 
