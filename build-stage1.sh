@@ -91,7 +91,7 @@ mkdir -p "${TARGET_ROOTFS_DIR}"
 # Run toolchain relocate script if it exists
 if [ -f "${TOOLCHAIN_DIR}/relocate-sdk.sh" ]; then
     msg "Relocating toolchain..."
-    bash "${TOOLCHAIN_DIR}/relocate-sdk.sh" "${TARGET_ROOTFS_DIR}"
+    bash "${TOOLCHAIN_DIR}/relocate-sdk.sh" "${TOOLCHAIN_DIR}"
 else
     msg "No relocate-sdk.sh script found, please ensure the toolchain is correctly set up."
     exit 1
