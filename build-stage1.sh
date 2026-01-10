@@ -111,7 +111,7 @@ wget -nv --tries=15 --waitretry=15 --input-file="${SOURCES_LIST}" --directory-pr
 
 msg "Starting build for m4..."
 
-extract_file "${SOURCES_DIR}/m4-1.4.19.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
+extract_file "${SOURCES_DIR}/m4-1.4.20.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
 
 cd "${SOURCES_BUILD_DIR}/m4-src"
 
