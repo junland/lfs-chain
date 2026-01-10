@@ -21,7 +21,7 @@ extract_file() {
 	local dest_dir=$2
 
 	# Use environment variables with defaults
-	local strip_components=${EXTRACT_FILE_STRIP_COMPONENTS:-0}
+	local strip_components=${EXTRACT_FILE_STRIP_COMPONENTS:-1}
 	local verbose=${EXTRACT_FILE_VERBOSE_EXTRACT:-false}
 
 	# Make sure the archive file exists, if not find another archive file with a different extension.
