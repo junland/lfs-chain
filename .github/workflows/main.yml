@@ -49,8 +49,8 @@ jobs:
 
       - name: Reconfigure sh to use bash
         run: |
-          sudo dpkg-reconfigure dash
-          sudo ln -sf bash /bin/sh
+          echo "dash dash/sh boolean false" | sudo debconf-set-selections
+          sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
 
       - uses: actions/checkout@v4
 
@@ -60,7 +60,6 @@ jobs:
       - name: Execute the stage1 build script
         id: stage1
         env:
-          TARGET_ARCH: ${{ matrix.TARGET_ARCH }}
           TARGET_TRIPLET: ${{ matrix.TARGET_TRIPLET }}
           TOOLCHAIN_TARBALL_URL: ${{ matrix.TOOLCHAIN_TARBALL_URL }}
           TOOLCHAIN_TARBALL_FILENAME: ${{ matrix.TOOLCHAIN_TARBALL_FILENAME }}
