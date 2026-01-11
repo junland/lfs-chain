@@ -19,6 +19,8 @@ jobs:
             TOOLCHAIN_TARBALL_FILENAME: aarch64--glibc--stable-2025.08-1.tar.xz
             TARGET_TRIPLET: aarch64-linux-gnu
     steps:
+      - uses: actions/checkout@v4
+
       - name: Install dependencies (Ubuntu/Debian)
         run: |
           sudo apt-get update
@@ -51,8 +53,6 @@ jobs:
         run: |
           echo "dash dash/sh boolean false" | sudo debconf-set-selections
           sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
-
-      - uses: actions/checkout@v4
 
       - name: Allow scripts to run
         run: chmod +x *.sh

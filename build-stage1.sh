@@ -75,6 +75,16 @@ extract_file() {
 	esac
 }
 
+msg "Build Information:"
+echo "  Toolchain URL:       ${TOOLCHAIN_TARBALL_URL}"
+echo "  Toolchain Directory: ${TOOLCHAIN_DIR}"
+echo "  Target RootFS Dir:   ${TARGET_ROOTFS_DIR}"
+echo "  Target Triplet:      ${TARGET_TRIPLET}"
+echo "  Toolchain Tarball:   ${TOOLCHAIN_TARBALL_FILENAME}"
+echo "  Sources List:        ${SOURCES_LIST}"
+echo "  Sources Dir:         ${SOURCES_DIR}"
+echo "  Sources Build Dir:   ${SOURCES_BUILD_DIR}"
+
 msg "Downloading toolchain tarball..."
 
 mkdir -vp "${TOOLCHAIN_DIR}"
@@ -115,7 +125,7 @@ extract_file "${SOURCES_DIR}/m4-1.4.20.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
 
 cd "${SOURCES_BUILD_DIR}/m4-src"
 
-./configure --prefix="/usr" --host=$TARGET_TRIPLET --build=$(build-aux/config.guess)
+./configure --prefix="/usr" --host=${TARGET_TRIPLET} --build=$(build-aux/config.guess)
 
 make -j$(nproc)
 
