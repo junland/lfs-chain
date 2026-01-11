@@ -14,11 +14,11 @@ jobs:
           - TARGET_ARCH: x86_64 # AMD64
             TOOLCHAIN_TARBALL_URL: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--stable-2025.08-1.tar.xz"
             TOOLCHAIN_TARBALL_FILENAME: x86-64--glibc--stable-2025.08-1.tar.xz
-            TARGET_TRIPLET: x86_64-linux-gnu
+            TARGET_TRIPLET: x86_64-buildroot-linux-gnu
           - TARGET_ARCH: aarch64   # ARM64
             TOOLCHAIN_TARBALL_URL: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2025.08-1.tar.xz"
             TOOLCHAIN_TARBALL_FILENAME: aarch64--glibc--stable-2025.08-1.tar.xz
-            TARGET_TRIPLET: aarch64-linux-gnu
+            TARGET_TRIPLET: aarch64buildroot-linux-gnu
     steps:
       - uses: actions/checkout@v4
 

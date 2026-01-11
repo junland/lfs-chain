@@ -2,11 +2,11 @@
 
 set -euo pipefail
 
-TOOLCHAIN_TARBALL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--stable-2025.08-1.tar.xz"
+TOOLCHAIN_TARBALL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2025.08-1.tar.xz"
 TOOLCHAIN_DIR=${TOOLCHAIN_DIR:-"${PWD}/toolchain"}
-TOOLCHAIN_TARBALL_FILENAME=${TOOLCHAIN_TARBALL_FILENAME:-"x86-64-glibc-stable-2025.08-1.tar.xz"}
+TOOLCHAIN_TARBALL_FILENAME=${TOOLCHAIN_TARBALL_FILENAME:-"aarch64-glibc-stable-2025.08-1.tar.xz"}
 TARGET_ROOTFS_DIR=${TARGET_ROOTFS_DIR:-"${PWD}/target-rootfs"}
-TARGET_TRIPLET="${TARGET_TRIPLET:-x86_64-linux-gnu}"
+TARGET_TRIPLET="${TARGET_TRIPLET:-aarch64-buildroot-linux-gnu}"
 
 SOURCES_DIR=${SOURCES_DIR:-"${TARGET_ROOTFS_DIR}/sources"}
 SOURCES_LIST=${SOURCES_LIST:-"${PWD}/data/sources.list"}
@@ -141,11 +141,8 @@ extract_file "${SOURCES_DIR}/m4-1.4.20.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
 
 cd "${SOURCES_BUILD_DIR}/m4-src"
 
-./configure --prefix="/usr" --host=${TARGET_TRIPLET} --build=$(build-aux/config.guess)
+./configure --prefix="/usr" --host=${TARGET_TRIPLET} --build=$(build-aux/config.guess) 
 
 make -j$(nproc)
 
 make DESTDIR="${TARGET_ROOTFS_DIR}" install
-
-
-
