@@ -109,6 +109,24 @@ fi
 
 export PATH="${TOOLCHAIN_DIR}/bin:${PATH}"
 
+# Detect the cross-compiler prefix from the toolchain
+# Bootlin toolchains use a prefix like 'x86_64-linux-' or 'aarch64-linux-'
+CROSS_COMPILE_PREFIX=$(find "${TOOLCHAIN_DIR}/bin" -name "*-gcc" -type f | head -1 | xargs basename | sed 's/-gcc$//')
+if [ -z "${CROSS_COMPILE_PREFIX}" ]; then
+	msg "Error: Could not detect cross-compiler prefix in ${TOOLCHAIN_DIR}/bin"
+	exit 1
+fi
+msg "Detected cross-compiler prefix: ${CROSS_COMPILE_PREFIX}"
+
+# Export cross-compiler environment variables for configure scripts
+export CC="${CROSS_COMPILE_PREFIX}-gcc"
+export CXX="${CROSS_COMPILE_PREFIX}-g++"
+export AR="${CROSS_COMPILE_PREFIX}-ar"
+export AS="${CROSS_COMPILE_PREFIX}-as"
+export LD="${CROSS_COMPILE_PREFIX}-ld"
+export RANLIB="${CROSS_COMPILE_PREFIX}-ranlib"
+export STRIP="${CROSS_COMPILE_PREFIX}-strip"
+
 # Setup directories
 mkdir -vp "${SOURCES_BUILD_DIR}" "${SOURCES_DIR}" "${TARGET_ROOTFS_DIR}"
 
@@ -121,13 +139,13 @@ wget -nv --tries=15 --waitretry=15 --input-file="${SOURCES_LIST}" --directory-pr
 
 msg "Starting build for m4..."
 
-extract_file "${SOURCES_DIR}/m4-1.4.20.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
+extract_file "${SOURCES_DIR}/m4-1.4.20.tar.xz" "${SOURCES_BUILD_DIR}/m4-src"
 
 cd "${SOURCES_BUILD_DIR}/m4-src"
 
-./configure --prefix="/usr" --host=${TARGET_TRIPLET} --build=$(build-aux/config.guess)
+./configure --prefix="/usr" --host="${CROSS_COMPILE_PREFIX}" --build="$(build-aux/config.guess)"
 
-make -j$(nproc)
+make -j"$(nproc)"
 
 make DESTDIR="${TARGET_ROOTFS_DIR}" install
 
