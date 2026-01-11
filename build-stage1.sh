@@ -120,9 +120,6 @@ msg "Extracting toolchain..."
 
 extract_file "${TOOLCHAIN_DIR}/${TOOLCHAIN_TARBALL_FILENAME}" "${TOOLCHAIN_DIR}"
 
-msg "Setting up target build directory..."
-mkdir -p "${TARGET_ROOTFS_DIR}"
-
 # Run toolchain relocate script if it exists
 if [ -f "${TOOLCHAIN_DIR}/relocate-sdk.sh" ]; then
     msg "Relocating toolchain..."
@@ -134,8 +131,19 @@ fi
 
 export PATH="${TOOLCHAIN_DIR}/bin:${PATH}"
 
-# Setup directories
-mkdir -vp "${SOURCES_BUILD_DIR}" "${SOURCES_DIR}" "${TARGET_ROOTFS_DIR}"
+msg "Setting up target root filesystem directory..."
+
+mkdir -p "${TARGET_ROOTFS_DIR}"
+
+mkdir -vp "$TARGET_ROOTFS_DIR"/{etc,var} "$TARGET_ROOTFS_DIR"/usr/{bin,lib,sbin}
+
+for i in bin lib sbin; do
+	msg "Creating symlink $TARGET_ROOTFS_DIR/$i -> usr/$i"
+	ln -sv usr/$i "$TARGET_ROOTFS_DIR"/$i
+done
+
+msg "Creating symlink $TARGET_ROOTFS_DIR/lib64 -> usr/lib"
+ln -sv usr/lib "$TARGET_ROOTFS_DIR"/lib64
 
 # Download all source files listed in sources.list file
 msg "Downloading source files..."
@@ -205,5 +213,7 @@ cd "${SOURCES_BUILD_DIR}/bash-src"
 make -j$(nproc)
 
 make DESTDIR="${TARGET_ROOTFS_DIR}" install
+
 ln -sv bash "${TARGET_ROOTFS_DIR}/usr/bin/sh"
+
 clean_build_dir
