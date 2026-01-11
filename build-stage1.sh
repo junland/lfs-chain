@@ -110,10 +110,15 @@ fi
 export PATH="${TOOLCHAIN_DIR}/bin:${PATH}"
 
 # Detect the cross-compiler prefix from the toolchain
-# Bootlin toolchains use a prefix like 'x86_64-linux-' or 'aarch64-linux-'
-CROSS_COMPILE_PREFIX=$(find "${TOOLCHAIN_DIR}/bin" -name "*-gcc" -type f | head -1 | xargs basename | sed 's/-gcc$//')
+# Bootlin toolchains use a prefix like 'x86_64-linux' or 'aarch64-linux'
+GCC_PATH=$(find "${TOOLCHAIN_DIR}/bin" -maxdepth 1 -name "*-gcc" -type f 2>/dev/null | head -1)
+if [ -z "${GCC_PATH}" ]; then
+	msg "Error: Could not find cross-compiler gcc in ${TOOLCHAIN_DIR}/bin"
+	exit 1
+fi
+CROSS_COMPILE_PREFIX=$(basename "${GCC_PATH}" | sed 's/-gcc$//')
 if [ -z "${CROSS_COMPILE_PREFIX}" ]; then
-	msg "Error: Could not detect cross-compiler prefix in ${TOOLCHAIN_DIR}/bin"
+	msg "Error: Could not detect cross-compiler prefix from ${GCC_PATH}"
 	exit 1
 fi
 msg "Detected cross-compiler prefix: ${CROSS_COMPILE_PREFIX}"
