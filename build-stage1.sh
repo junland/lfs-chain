@@ -84,6 +84,11 @@ extract_file() {
 	esac
 }
 
+clean_build_dir() {
+	msg "Cleaning build directory..."
+	rm -rf "$SOURCES_BUILD_DIR"
+}
+
 msg "Build Information:"
 echo "  Toolchain URL:       ${TOOLCHAIN_TARBALL_URL}"
 echo "  Toolchain Directory: ${TOOLCHAIN_DIR}"
@@ -100,6 +105,10 @@ echo "  AS:                  ${AS}"
 echo "  LD:                  ${LD}"
 echo "  RANLIB:              ${RANLIB}"
 echo "  STRIP:               ${STRIP}"
+
+msg "Cleaning up any previous build artifacts..."
+
+rm -rf "${TOOLCHAIN_DIR}" "${TARGET_ROOTFS_DIR}" "${SOURCES_BUILD_DIR}" "${SOURCES_DIR}"
 
 msg "Downloading toolchain tarball..."
 
@@ -133,8 +142,6 @@ msg "Downloading source files..."
 
 wget -nv --tries=15 --waitretry=15 --input-file="${SOURCES_LIST}" --directory-prefix="${SOURCES_DIR}"
 
-# Start the build for m4
-
 msg "Starting build for m4..."
 
 extract_file "${SOURCES_DIR}/m4-1.4.20.tar.gz" "${SOURCES_BUILD_DIR}/m4-src"
@@ -146,3 +153,57 @@ cd "${SOURCES_BUILD_DIR}/m4-src"
 make -j$(nproc)
 
 make DESTDIR="${TARGET_ROOTFS_DIR}" install
+
+clean_build_dir
+
+msg "Starting build for ncurses..."
+
+extract_file "${SOURCES_DIR}/ncurses-6.5-20250809.tgz" "${SOURCES_BUILD_DIR}/ncurses-src"
+
+cd "${SOURCES_BUILD_DIR}/ncurses-src"
+
+mkdir build
+
+pushd build
+../configure AWK=gawk CC=gcc
+CC=gcc make -C include
+CC=gcc make -C progs tic
+install progs/tic ${TOOLCHAIN_DIR}/bin
+popd
+
+./configure \
+            --prefix=/usr                \
+            --host=${TARGET_TRIPLET}     \
+            --build=$(./config.guess)    \
+            --mandir=/usr/share/man      \
+            --with-manpage-format=normal \
+            --with-shared                \
+            --without-normal             \
+            --with-cxx-shared            \
+            --without-debug              \
+            --without-ada                \
+            --disable-stripping          \
+            AWK=gawk
+
+make -j$(nproc)
+
+make DESTDIR="${TARGET_ROOTFS_DIR}" install
+
+clean_build_dir
+
+msg "Starting build for bash..."
+
+extract_file "${SOURCES_DIR}/bash-5.3.tar.gz" "${SOURCES_BUILD_DIR}/bash-src"
+
+cd "${SOURCES_BUILD_DIR}/bash-src"
+
+./configure --prefix=/usr                      \
+            --build=$(sh support/config.guess) \
+            --host=${TARGET_TRIPLET}           \
+            --without-bash-malloc
+
+make -j$(nproc)
+
+make DESTDIR="${TARGET_ROOTFS_DIR}" install
+ln -sv bash "${TARGET_ROOTFS_DIR}/usr/bin/sh"
+clean_build_dir
