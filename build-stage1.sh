@@ -12,6 +12,15 @@ SOURCES_DIR=${SOURCES_DIR:-"${TARGET_ROOTFS_DIR}/sources"}
 SOURCES_LIST=${SOURCES_LIST:-"${PWD}/data/sources.list"}
 SOURCES_BUILD_DIR=${SOURCES_BUILD_DIR:-"${TARGET_ROOTFS_DIR}/build"}
 
+# Export cross-compiler environment variables for configure scripts
+export CC="${TARGET_TRIPLET}-gcc"
+export CXX="${TARGET_TRIPLET}-g++"
+export AR="${TARGET_TRIPLET}-ar"
+export AS="${TARGET_TRIPLET}-as"
+export LD="${TARGET_TRIPLET}-ld"
+export RANLIB="${TARGET_TRIPLET}-ranlib"
+export STRIP="${TARGET_TRIPLET}-strip"
+
 msg() {
 	echo " ===> $*"
 }
@@ -84,6 +93,13 @@ echo "  Toolchain Tarball:   ${TOOLCHAIN_TARBALL_FILENAME}"
 echo "  Sources List:        ${SOURCES_LIST}"
 echo "  Sources Dir:         ${SOURCES_DIR}"
 echo "  Sources Build Dir:   ${SOURCES_BUILD_DIR}"
+echo "  GCC:                 ${CC}"
+echo "  CXX:                 ${CXX}"
+echo "  AR:                  ${AR}"
+echo "  AS:                  ${AS}"
+echo "  LD:                  ${LD}"
+echo "  RANLIB:              ${RANLIB}"
+echo "  STRIP:               ${STRIP}"
 
 msg "Downloading toolchain tarball..."
 
